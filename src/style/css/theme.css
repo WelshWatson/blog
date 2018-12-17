@@ -6959,9 +6959,10 @@ a:hover {
 	display: inline-block;
 	padding-top: 20px;
 	padding-bottom: 40px;
-	background: url(../images/background-top.jpg) no-repeat center center fixed;
+	background: url(../../assets/images/my-desk.jpg) no-repeat center center fixed;
 	background-size: cover;
-	color: #fff;
+  color: #fff;
+  height: -webkit-fill-available;
 }
 
 .container-about {
@@ -6973,7 +6974,7 @@ a:hover {
 	display: inline-block;
 	padding-top: 20px;
 	padding-bottom: 40px;
-	background: url(../images/background-skills.jpg) no-repeat center center fixed;
+	background: url(../../assets/images/background-skills.jpg) no-repeat center center fixed;
 }
 
 .container-vision {

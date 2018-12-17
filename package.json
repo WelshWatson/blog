@@ -5,7 +5,7 @@
     "postinstall": "ng build --aot --prod",
     "ng": "ng",
     "start": "node server.js",
-    "dev": "concurrently \"ng build --aot --watch\" \"node server.js\"",
+    "dev": "concurrently --kill-others \"ng build --aot --watch\" \"node server.js\"",
     "build": "ng build --aot",
     "test": "ng test",
     "lint": "ng lint",
