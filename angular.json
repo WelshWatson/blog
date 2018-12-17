@@ -23,7 +23,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/style/fonts/font-awesome/css/font-awesome.min.css",
+              "src/style/bootstrap/css/bootstrap.min.css",
+              "src/style/css/theme.css"
             ],
             "scripts": []
           },
