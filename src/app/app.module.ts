@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './components/root/app.component';
+import { CanvasComponent } from './components/canvas/canvas.component';
 import {NavbarComponent} from './components/navbar/navbar.component';
 import {HomeComponent} from './components/home/home.component';
 import {SkillsComponent} from './components/skills/skills.component';
@@ -18,7 +19,8 @@ import {ContactComponent} from './components/contact/contact.component';
     SkillsComponent,
     AboutComponent,
     BlogComponent,
-    ContactComponent
+    ContactComponent,
+    CanvasComponent
   ],
   imports: [
     BrowserModule,
