@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
-import { ImageSet } from './models/image-set';
 import { DefaultMap } from './maps/default-map';
 import { loadImages } from './tile-loader';
 
