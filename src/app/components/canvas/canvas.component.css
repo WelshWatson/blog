@@ -1,13 +1,13 @@
-p {
-  font-family: Lato;
+.margin-above {
+  margin-top: 120px;
 }
 
-canvas {
-  border: 2px solid rgba(0,0,0,0.12);
-  transition: 300ms;
-  border-radius: 4px;
+.black-strip {
+  background-color: #1E1F23;
+  opacity: 0.8;
+  padding: 20px;
 }
 
-canvas:hover {
-  border: 2px solid rgba(0,0,0,0.54);
+.instructions {
+  color: white;
 }
