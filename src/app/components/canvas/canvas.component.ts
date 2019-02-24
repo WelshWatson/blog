@@ -17,13 +17,19 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   canvasHeight = 474;
 
   private canvas: CanvasRenderingContext2D;
-  private moveSpeed = 10;
+  private moveSpeed = 7;
   private images: ImageSet[];
   private tilesHigh = 10;
   private tileWidth = 50;
   private tileHeight = 50;
   private tileOffsetX = 0;
   private pixelsToRenderOutsideView = 50;
+  private lastCalledTime = performance.now();
+  private truncatedTimer = 0;
+  private fps = '0';
+  private moveRight = false;
+  private moveLeft = false;
+  private jump = false;
 
   constructor(private renderer: Renderer2) {
     this.images = loadImages();
@@ -41,8 +47,22 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   private animate() {
     this.renderBlueBackground();
     this.renderTilemap();
-
+    this.canvas.strokeStyle = 'Black';
+    this.canvas.strokeText(this.fps.toString(), 10, 10);
+    this.moveCharacter();
     requestAnimationFrame(this.animate.bind(this));
+    this.requestAnimFrame();
+  }
+
+  private moveCharacter(): void {
+    if (this.moveRight) {
+        this.tileOffsetX -= this.moveSpeed;
+        return;
+    }
+    if (this.moveLeft) {
+      this.tileOffsetX += this.moveSpeed;
+      return;
+    }
   }
 
   private renderBlueBackground(): void {
@@ -77,12 +97,31 @@ export class CanvasComponent implements OnInit, AfterViewInit {
 
   private listenForKeyboardInput() {
     this.globalListenFunc = this.renderer.listen('document', 'keydown', e => {
-      switch ((e.key as string).toLocaleLowerCase()) {
-        case 'd':
-          this.tileOffsetX -= this.moveSpeed;
+      switch ((e.code as string)) {
+        case 'KeyD':
+          this.moveRight = true;
           break;
-        case 'a':
-          this.tileOffsetX += this.moveSpeed;
+        case 'KeyA':
+          this.moveLeft = true;
+          break;
+        case 'Space':
+          this.jump = true;
+          console.log('jump!');
+          break;
+      }
+    });
+
+    this.globalListenFunc = this.renderer.listen('document', 'keyup', e => {
+      switch ((e.code as string)) {
+        case 'KeyD':
+          this.moveRight = false;
+          break;
+        case 'KeyA':
+          this.moveLeft = false;
+          break;
+        case 'Space':
+          this.jump = false;
+          console.log('stop jumping !');
           break;
       }
     });
@@ -97,5 +136,21 @@ export class CanvasComponent implements OnInit, AfterViewInit {
       return null;
     }
     return null;
+  }
+
+  requestAnimFrame() {
+    if (!this.lastCalledTime) {
+      this.lastCalledTime = performance.now();
+      this.fps = '0';
+      return;
+
+    }
+    const delta = (performance.now() - this.lastCalledTime) / 1000;
+    this.lastCalledTime = performance.now();
+
+    if (this.truncatedTimer !== Math.trunc(this.lastCalledTime / 1000)) {
+      this.truncatedTimer = Math.trunc(this.lastCalledTime / 1000);
+      this.fps = `FPS: ${(1 / delta).toPrecision(2)}`;
+    }
   }
 }
