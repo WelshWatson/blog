@@ -12,17 +12,18 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   @ViewChild('graphicsCanvas') graphicsCanvas: ElementRef;
 
   globalListenFunc: Function;
-  canvasWidth = 960;
-  canvasHeight = 474;
+  canvasWidth = window.innerWidth * 0.65;
+  canvasHeight = window.innerHeight * 0.7;
 
   private canvas: CanvasRenderingContext2D;
   private moveSpeed = 7;
   private images = {};
   private tilesHigh = 10;
-  private tileWidth = 50;
-  private tileHeight = 50;
+  private tileWidth = this.canvasWidth / 20;
+  private tileHeight = this.canvasHeight / 13;
   private tileOffsetX = 0;
-  private pixelsToRenderOutsideView = 50;
+  private tileOffsetY = 150;
+  private additionalPixelsToRenderOutsideView = 0;
   private lastCalledTime = performance.now();
   private truncatedTimer = 0;
   private fps = '0';
@@ -56,6 +57,9 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   }
 
   private moveCharacter(): void {
+    if (this.tileOffsetX > 0) {
+      this.moveLeft = false;
+    }
     if (this.moveRight) {
         this.tileOffsetX -= this.moveSpeed;
         return;
@@ -82,7 +86,11 @@ export class CanvasComponent implements OnInit, AfterViewInit {
           const tile = this.getTile(y, x);
 
           if (tile) {
-            this.canvas.drawImage(tile, tilePositionX + this.tileOffsetX, tilePositionY, 50, 50);
+            this.canvas.drawImage(tile,
+                tilePositionX + this.tileOffsetX - this.tileWidth,
+                tilePositionY + this.tileOffsetY,
+                this.tileWidth,
+                this.tileHeight);
           }
         }
       }
@@ -90,10 +98,11 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   }
 
   private viewInsideWindow(tilePositionX: number, tilePositionY: number): boolean {
-    return tilePositionX + this.tileOffsetX + this.pixelsToRenderOutsideView > 0 &&
-      this.canvasWidth + this.pixelsToRenderOutsideView > tilePositionX + this.tileOffsetX &&
-      tilePositionY + this.pixelsToRenderOutsideView > 0 &&
-      this.canvasHeight + this.pixelsToRenderOutsideView > tilePositionY;
+    return tilePositionX + this.tileOffsetX + this.additionalPixelsToRenderOutsideView > 0 &&
+      this.canvasWidth + this.additionalPixelsToRenderOutsideView > tilePositionX + this.tileOffsetX - this.tileWidth &&
+
+      tilePositionY + 10 + this.additionalPixelsToRenderOutsideView > 0 &&
+      this.canvasHeight + this.additionalPixelsToRenderOutsideView > tilePositionY;
   }
 
   private listenForKeyboardInput() {
