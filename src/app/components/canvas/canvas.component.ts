@@ -18,7 +18,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
 
   private canvas: CanvasRenderingContext2D;
   private moveSpeed = 7;
-  private images: ImageSet[];
+  private images = {};
   private tilesHigh = 10;
   private tileWidth = 50;
   private tileHeight = 50;
@@ -30,9 +30,11 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   private moveRight = false;
   private moveLeft = false;
   private jump = false;
+  private tileIndex: number[][];
 
   constructor(private renderer: Renderer2) {
     this.images = loadImages();
+    this.tileIndex = DefaultMap();
   }
 
   ngAfterViewInit(): void {
@@ -72,7 +74,7 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   }
 
   private renderTilemap(): void {
-    for (let x = 0; x < DefaultMap()[0].length; x++) {
+    for (let x = 0; x < this.tileIndex[0].length; x++) {
       for (let y = 0; y < this.tilesHigh; y++) {
         const tilePositionX = x * this.tileWidth;
         const tilePositionY = y * this.tileHeight;
@@ -106,7 +108,6 @@ export class CanvasComponent implements OnInit, AfterViewInit {
           break;
         case 'Space':
           this.jump = true;
-          console.log('jump!');
           break;
       }
     });
@@ -119,19 +120,15 @@ export class CanvasComponent implements OnInit, AfterViewInit {
         case 'KeyA':
           this.moveLeft = false;
           break;
-        case 'Space':
-          this.jump = false;
-          console.log('stop jumping !');
-          break;
       }
     });
   }
 
   private getTile(x: number, y: number): HTMLImageElement {
-    if (DefaultMap().length > x && DefaultMap()[0].length > y) {
-      const tile = this.images.find(t => t.tileNumber === DefaultMap()[x][y]);
+    if (this.tileIndex.length > x && this.tileIndex[0].length > y) {
+      const tile = this.images[this.tileIndex[x][y]];
       if (tile) {
-        return tile.image;
+        return tile;
       }
       return null;
     }
